@@ -97,34 +97,6 @@ MISSION     :: CREATE / LEARN / BREAK / REBUILD
 
 ---
 
-## `> ls ./projects`
-
-```text
-projects/
-
-├── project_01/
-├── project_02/
-├── project_03/
-└── future_ideas/
-```
-
-### `01 // PROJECT_NAME`
-
-```text
-STATUS :: BUILDING
-TYPE   :: SOFTWARE
-```
-
-> Your first project goes here.
-
-### `02 // PROJECT_NAME`
-
-```text
-STATUS :: ACTIVE
-TYPE   :: EXPERIMENT
-```
-
-> Your second project goes here.
 
 ### `03 // CLASSIFIED`
 
