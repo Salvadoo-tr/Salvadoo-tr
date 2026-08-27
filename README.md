@@ -1,189 +1,731 @@
-<div align="center">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SALVA // CYBERPUNK TERMINAL</title>
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== RESET ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-# SALVA
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-`SYSTEM TERMINAL // ONLINE`
+        /* ========== CYBERPUNK BACKGROUND EFFECTS ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(0deg, 
+                    rgba(0, 255, 156, 0.03) 0px, 
+                    rgba(0, 255, 156, 0.03) 2px,
+                    transparent 2px,
+                    transparent 4px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
 
-```text
-┌──────────────────────────────────────────────────────────┐
-│  ● ● ●   SALVA@GITHUB:~                                  │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  $ whoami                                                │
-│                                                          │
-│  SALVA                                                   │
-│                                                          │
-│  > software developer                                    │
-│  > building things with code                             │
-│  > exploring ideas, systems & automation                 │
-│                                                          │
-│  $ ./about-me.sh                                         │
-│                                                          │
-│  [✓] STATUS      ONLINE                                  │
-│  [>] MODE        BUILDING                                │
-│  [~] LOCATION    TURKEY                                  │
-│  [#] SYSTEM      OPERATIONAL                             │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-```
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 255, 156, 0.03) 3px,
+                rgba(0, 255, 156, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanMove 8s linear infinite;
+        }
 
-`● ONLINE`    `//`    `DARK MODE`
+        @keyframes scanMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
 
-</div>
+        /* Glitch efekti için rastgele noktalar */
+        .glitch-dots {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+        }
 
----
+        /* ========== TERMINAL CONTAINER ========== */
+        .terminal-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 900px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #00ff9c;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 156, 0.1),
+                inset 0 0 40px rgba(0, 255, 156, 0.05),
+                0 0 80px rgba(0, 255, 156, 0.05);
+            backdrop-filter: blur(10px);
+        }
 
-## `> whoami`
+        /* ========== TERMINAL HEADER ========== */
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 156, 0.2);
+            margin-bottom: 20px;
+        }
 
-```text
-USER        :: SALVA
-STATUS      :: ONLINE
-MODE        :: BUILDING
-ENVIRONMENT :: GITHUB
+        .terminal-title {
+            color: #00ff9c;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(0, 255, 156, 0.3);
+        }
 
-I'm a developer who enjoys turning ideas into working software.
-Currently learning, building, experimenting and occasionally
-breaking things just to figure out how they work.
-```
+        .terminal-title .blink {
+            animation: blink 1.5s step-end infinite;
+        }
 
----
+        .terminal-dots {
+            display: flex;
+            gap: 10px;
+        }
 
-## `> ./about-me.sh`
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
 
-```text
-[+] Initializing user profile...
+        .dot-red { background: #ff0055; }
+        .dot-yellow { background: #ffdd00; }
+        .dot-green { background: #00ff9c; }
 
-USER        :: SALVA
-STATUS      :: ● ONLINE
-MODE        :: BUILDING
-MISSION     :: CREATE / LEARN / BREAK / REBUILD
+        .dot:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px currentColor;
+        }
 
-[✓] Curiosity ............ 100%
-[✓] Coffee ............... loading...
-[✓] Bugs ................. definitely present
-[✓] Sleep ................ optional
+        /* ========== TERMINAL OUTPUT ========== */
+        .terminal-output {
+            color: #00ff9c;
+            font-size: 15px;
+            line-height: 1.8;
+            min-height: 500px;
+            position: relative;
+        }
 
-[+] Profile initialized.
-```
+        .terminal-output .line {
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+            margin-bottom: 2px;
+        }
 
----
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
 
-## `> neofetch`
+        .prompt {
+            color: #00ff9c;
+        }
 
-```text
-             SALVA@github
-        ─────────────────────
+        .prompt-symbol {
+            color: #00ff9c;
+            font-weight: bold;
+        }
 
-        OS       :: Human.exe
-        Shell    :: zsh
-        Editor   :: VS Code
-        Mode     :: Dark
-        Status   :: ● Online
-        Focus    :: Build stuff
+        .command {
+            color: #ffffff;
+        }
 
-        ─────────────────────
-        curiosity.exe :: RUNNING
-        coffee.exe    :: RUNNING
-        sleep.exe     :: NOT FOUND
-```
+        .output-text {
+            color: #b0ffd6;
+            padding-left: 25px;
+            display: block;
+        }
 
-### `// TECH STACK`
+        .highlight {
+            color: #ffdd00;
+        }
 
-<p align="center">
+        .error {
+            color: #ff0055;
+        }
 
-<img src="https://skillicons.dev/icons?i=js,ts,python,nodejs,react,nextjs,git,github,docker,linux,vscode&theme=dark" />
+        .success {
+            color: #00ff9c;
+        }
 
-</p>
+        .info {
+            color: #00bfff;
+        }
 
----
+        /* ASCII Art */
+        .ascii-art {
+            color: #00ff9c;
+            font-size: 12px;
+            line-height: 1.3;
+            white-space: pre;
+            margin: 10px 0;
+            opacity: 0.7;
+            text-shadow: 0 0 5px rgba(0, 255, 156, 0.1);
+        }
 
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 255, 156, 0.1);
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
 
-### `03 // CLASSIFIED`
+        .progress-bar .fill {
+            height: 100%;
+            background: #00ff9c;
+            width: 0%;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 255, 156, 0.5);
+            transition: width 0.5s ease;
+        }
 
-```text
-STATUS :: ????
-ACCESS :: DENIED
-```
+        /* ========== TERMINAL INPUT ========== */
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 255, 156, 0.1);
+        }
 
-```text
-Maybe later...
-```
+        .terminal-input-line .prompt {
+            color: #00ff9c;
+            margin-right: 10px;
+            font-size: 16px;
+        }
 
----
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #00ff9c;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            outline: none;
+            flex: 1;
+            caret-color: #00ff9c;
+        }
 
-## `> git status`
+        .terminal-input::placeholder {
+            color: rgba(0, 255, 156, 0.3);
+        }
 
-```text
-On branch main
+        .cursor-blink {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff9c;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
 
-Changes not staged for commit:
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
 
-  modified:   ideas
-  modified:   skills
-  modified:   future_projects
+        /* ========== COMMANDS ========== */
+        .command-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 156, 0.1);
+        }
 
-Untracked files:
+        .cmd-btn {
+            background: rgba(0, 255, 156, 0.05);
+            border: 1px solid rgba(0, 255, 156, 0.2);
+            color: #00ff9c;
+            padding: 6px 15px;
+            border-radius: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-  something-cool/
+        .cmd-btn:hover {
+            background: rgba(0, 255, 156, 0.15);
+            border-color: #00ff9c;
+            box-shadow: 0 0 20px rgba(0, 255, 156, 0.1);
+            transform: translateY(-2px);
+        }
 
-nothing is ever really finished.
-```
+        .cmd-btn:active {
+            transform: scale(0.95);
+        }
 
----
+        /* ========== STATUS BAR ========== */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 156, 0.1);
+            font-size: 12px;
+            color: rgba(0, 255, 156, 0.6);
+        }
 
-## `> github --stats`
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-<div align="center">
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
 
-<img height="180" src="https://github-readme-stats.vercel.app/api?username=Salvadoo-tr&show_icons=true&hide_border=true&theme=transparent&title_color=00ff9c&text_color=ffffff&icon_color=00ff9c" />
+        .status-dot.online {
+            background: #00ff9c;
+            animation: pulse 2s ease-in-out infinite;
+        }
 
-<img height="180" src="https://github-readme-streak-stats.demolab.com?user=Salvadoo-tr&theme=dark&hide_border=true&background=00000000&ring=00ff9c&fire=00ff9c&currStreakLabel=00ff9c" />
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
 
-</div>
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .terminal-container {
+                padding: 15px;
+            }
+            .terminal-output {
+                font-size: 13px;
+                line-height: 1.6;
+            }
+            .terminal-title {
+                font-size: 11px;
+            }
+            .ascii-art {
+                font-size: 8px;
+            }
+            .command-list {
+                gap: 5px;
+            }
+            .cmd-btn {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
 
----
+        @media (max-width: 480px) {
+            .terminal-output {
+                font-size: 11px;
+                line-height: 1.5;
+            }
+            .terminal-container {
+                padding: 10px;
+                border-radius: 8px;
+            }
+            .terminal-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
 
-## `> activity`
+        /* ========== SCROLLBAR ========== */
+        .terminal-output::-webkit-scrollbar {
+            width: 4px;
+        }
+        .terminal-output::-webkit-scrollbar-track {
+            background: rgba(0, 255, 156, 0.05);
+        }
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: #00ff9c;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
 
-<div align="center">
+    <!-- Cyberpunk Background Effects -->
+    <div class="scanline"></div>
+    <div class="glitch-dots" id="glitchDots"></div>
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=Salvadoo-tr&bg_color=00000000&color=00ff9c&line=00ff9c&point=ffffff&area=true&hide_border=true" />
+    <!-- ============================================================ -->
+    <!-- TERMINAL -->
+    <!-- ============================================================ -->
+    <div class="terminal-container">
+        
+        <!-- Header -->
+        <div class="terminal-header">
+            <div class="terminal-title">
+                <span class="blink">●</span> SALVA@CYBERPUNK:~ 
+                <span style="opacity:0.5; font-size:11px;">// v2.0</span>
+            </div>
+            <div class="terminal-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+            </div>
+        </div>
 
-</div>
+        <!-- Output Area -->
+        <div class="terminal-output" id="output">
+            <!-- İçerik JS ile doldurulacak -->
+        </div>
 
----
+        <!-- Input Line -->
+        <div class="terminal-input-line">
+            <span class="prompt">$</span>
+            <input type="text" class="terminal-input" id="commandInput" placeholder="Komut girin..." autofocus>
+            <span class="cursor-blink"></span>
+        </div>
 
-## `> ./connect.sh`
+        <!-- Quick Commands -->
+        <div class="command-list">
+            <button class="cmd-btn" data-cmd="whoami">> whoami</button>
+            <button class="cmd-btn" data-cmd="about">> ./about-me.sh</button>
+            <button class="cmd-btn" data-cmd="neofetch">> neofetch</button>
+            <button class="cmd-btn" data-cmd="projects">> ls ./projects</button>
+            <button class="cmd-btn" data-cmd="status">> git status</button>
+            <button class="cmd-btn" data-cmd="clear">> clear</button>
+            <button class="cmd-btn" data-cmd="help">> help</button>
+        </div>
 
-```text
-┌───────────────────────────────────────┐
-│                                       │
-│  Wanna build something?               │
-│                                       │
-│  GitHub   :: Salvadoo-tr              │
-│  Status   :: ● ONLINE                 │
-│                                       │
-└───────────────────────────────────────┘
-```
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-item">
+                <span class="status-dot online"></span>
+                SYSTEM: ONLINE
+            </span>
+            <span class="status-item">
+                <span class="status-dot online"></span>
+                CONNECTION: SECURE
+            </span>
+            <span class="status-item">
+                <span class="status-dot online"></span>
+                MODE: BUILDING
+            </span>
+            <span class="status-item" id="timeDisplay">
+                ⏱️ 00:00:00
+            </span>
+        </div>
+    </div>
 
-<div align="center">
+    <script>
+        // ============================================================
+        // DATA
+        // ============================================================
+        const asciiArt = `
+        ███████╗ █████╗ ██╗     ██╗   ██╗ █████╗ 
+        ██╔════╝██╔══██╗██║     ██║   ██║██╔══██╗
+        ███████╗███████║██║     ██║   ██║███████║
+        ╚════██║██╔══██║██║     ██║   ██║██╔══██║
+        ███████║██║  ██║███████╗╚██████╔╝██║  ██║
+        ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝
+        `;
 
-[![GitHub](https://img.shields.io/badge/GitHub-111111?style=for-the-badge\&logo=github\&logoColor=white)](https://github.com/Salvadoo-tr)
+        // ============================================================
+        // COMMAND HANDLER
+        // ============================================================
+        const output = document.getElementById('output');
+        const input = document.getElementById('commandInput');
+        let commandHistory = [];
+        let historyIndex = -1;
 
-</div>
+        function typeLine(text, className = '', delay = 50) {
+            return new Promise(resolve => {
+                const line = document.createElement('div');
+                line.className = 'line';
+                if (className) line.className += ' ' + className;
+                
+                // Eğer ascii art ise direkt yaz
+                if (text.includes('█████')) {
+                    line.textContent = text;
+                    line.style.whiteSpace = 'pre';
+                    output.appendChild(line);
+                    resolve();
+                    return;
+                }
 
----
+                // Tek tek yazma efekti
+                let i = 0;
+                const type = () => {
+                    if (i < text.length) {
+                        line.textContent += text[i];
+                        i++;
+                        setTimeout(type, delay);
+                    } else {
+                        resolve();
+                    }
+                };
+                output.appendChild(line);
+                type();
+            });
+        }
 
-<div align="center">
+        async function executeCommand(cmd) {
+            const trimmed = cmd.trim().toLowerCase();
+            
+            // Boş komut
+            if (!trimmed) {
+                await typeLine('');
+                return;
+            }
 
-```text
-$ echo "keep building."
+            // Komut geçmişine ekle
+            if (trimmed !== 'clear' && trimmed !== 'cls') {
+                commandHistory.push(trimmed);
+                historyIndex = commandHistory.length;
+            }
 
-> connection stable.
-> system operational.
-> SALVA // 2026
-```
+            // Komut başlığını yaz
+            await typeLine(`$ ${cmd}`, 'prompt');
 
-### `// END OF SESSION`
+            // Komut işleme
+            switch(trimmed) {
+                case 'whoami':
+                    await typeLine('USER        :: SALVA', 'output-text');
+                    await typeLine('STATUS      :: ● ONLINE', 'output-text');
+                    await typeLine('MODE        :: BUILDING', 'output-text');
+                    await typeLine('ENVIRONMENT :: CYBERPUNK', 'output-text');
+                    await typeLine('');
+                    await typeLine('> Software developer & cyberpunk enthusiast.', 'output-text');
+                    await typeLine('> Building the future, one line of code at a time.', 'output-text');
+                    await typeLine('> Currently: Breaking things to understand them.', 'output-text');
+                    break;
 
-</div>
+                case 'about':
+                case './about-me.sh':
+                    await typeLine('[+] Initializing user profile...', 'info');
+                    await typeLine('');
+                    await typeLine('USER        :: SALVA', 'output-text');
+                    await typeLine('STATUS      :: ● ONLINE', 'output-text');
+                    await typeLine('MODE        :: BUILDING', 'output-text');
+                    await typeLine('MISSION     :: CREATE / LEARN / BREAK / REBUILD', 'output-text');
+                    await typeLine('');
+                    await typeLine('[✓] Curiosity ............ 100%', 'success');
+                    await typeLine('[✓] Coffee ............... 99%', 'success');
+                    await typeLine('[✓] Bugs ................. definitely present', 'success');
+                    await typeLine('[✓] Sleep ................ optional', 'success');
+                    await typeLine('');
+                    await typeLine('[+] Profile initialized.', 'success');
+                    break;
+
+                case 'neofetch':
+                    await typeLine(asciiArt, 'ascii-art');
+                    await typeLine('        OS       :: CyberOS v2.0', 'output-text');
+                    await typeLine('        Shell    :: zsh', 'output-text');
+                    await typeLine('        Editor   :: VS Code', 'output-text');
+                    await typeLine('        Mode     :: Dark / Cyberpunk', 'output-text');
+                    await typeLine('        Status   :: ● Online', 'output-text');
+                    await typeLine('        Focus    :: Build stuff', 'output-text');
+                    await typeLine('');
+                    await typeLine('        curiosity.exe :: RUNNING', 'output-text');
+                    await typeLine('        coffee.exe    :: RUNNING', 'output-text');
+                    await typeLine('        sleep.exe     :: NOT FOUND', 'error');
+                    break;
+
+                case 'projects':
+                case 'ls ./projects':
+                    await typeLine('projects/');
+                    await typeLine('');
+                    await typeLine('├── cyber-terminal/');
+                    await typeLine('├── ai-assistant/');
+                    await typeLine('├── dark-web-tools/');
+                    await typeLine('└── future_ideas/');
+                    await typeLine('');
+                    await typeLine('> 3 projects active. 1 classified.', 'info');
+                    break;
+
+                case 'git status':
+                    await typeLine('On branch main');
+                    await typeLine('');
+                    await typeLine('Changes not staged for commit:', 'output-text');
+                    await typeLine('');
+                    await typeLine('  modified:   ideas', 'output-text');
+                    await typeLine('  modified:   skills', 'output-text');
+                    await typeLine('  modified:   future_projects', 'output-text');
+                    await typeLine('');
+                    await typeLine('Untracked files:', 'output-text');
+                    await typeLine('');
+                    await typeLine('  something-cool/', 'output-text');
+                    await typeLine('');
+                    await typeLine('nothing is ever really finished.', 'info');
+                    break;
+
+                case 'clear':
+                case 'cls':
+                    output.innerHTML = '';
+                    break;
+
+                case 'help':
+                    await typeLine('📡 KOMUTLAR:', 'highlight');
+                    await typeLine('');
+                    await typeLine('  whoami          - Kullanıcı bilgileri', 'output-text');
+                    await typeLine('  about           - Profil detayları', 'output-text');
+                    await typeLine('  neofetch        - Sistem bilgileri', 'output-text');
+                    await typeLine('  projects        - Projeleri listele', 'output-text');
+                    await typeLine('  git status      - Git durumu', 'output-text');
+                    await typeLine('  clear           - Ekranı temizle', 'output-text');
+                    await typeLine('  help            - Bu mesajı göster', 'output-text');
+                    await typeLine('  exit            - Oturumu kapat', 'output-text');
+                    break;
+
+                case 'exit':
+                    await typeLine('🔒 Oturum kapatılıyor...', 'error');
+                    await typeLine('> Bağlantı sonlandırıldı.', 'error');
+                    await typeLine('> Sistem beklemeye alındı.', 'error');
+                    break;
+
+                default:
+                    await typeLine(`Komut bulunamadı: ${cmd}`, 'error');
+                    await typeLine(`'help' yazarak komut listesini görebilirsin.`, 'info');
+            }
+
+            // Sonra bir boşluk
+            await typeLine('');
+            
+            // Scroll to bottom
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // ============================================================
+        // INPUT HANDLING
+        // ============================================================
+        input.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value;
+                input.value = '';
+                await executeCommand(cmd);
+                output.scrollTop = output.scrollHeight;
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (commandHistory.length > 0) {
+                    historyIndex = Math.max(0, historyIndex - 1);
+                    input.value = commandHistory[historyIndex] || '';
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex] || '';
+                } else {
+                    historyIndex = commandHistory.length;
+                    input.value = '';
+                }
+            }
+        });
+
+        // Button click
+        document.querySelectorAll('.cmd-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const cmd = btn.dataset.cmd;
+                input.value = cmd;
+                await executeCommand(cmd);
+                output.scrollTop = output.scrollHeight;
+            });
+        });
+
+        // Click anywhere to focus input
+        document.addEventListener('click', () => {
+            input.focus();
+        });
+
+        // ============================================================
+        // GLITCH DOTS EFFECT
+        // ============================================================
+        function createGlitchDots() {
+            const container = document.getElementById('glitchDots');
+            for (let i = 0; i < 20; i++) {
+                const dot = document.createElement('div');
+                dot.style.cssText = `
+                    position: fixed;
+                    width: ${Math.random() * 3 + 1}px;
+                    height: ${Math.random() * 3 + 1}px;
+                    background: #00ff9c;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.2};
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 0;
+                `;
+                container.appendChild(dot);
+            }
+        }
+        createGlitchDots();
+
+        // ============================================================
+        // CLOCK
+        // ============================================================
+        function updateClock() {
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0];
+            document.getElementById('timeDisplay').textContent = `⏱️ ${time}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // ============================================================
+        // AUTO-START: whoami
+        // ============================================================
+        window.addEventListener('load', async () => {
+            await typeLine('> Bağlantı kuruluyor...', 'info', 100);
+            await typeLine('> SALVA@CYBERPUNK terminal başlatılıyor...', 'info', 100);
+            await typeLine('');
+            await typeLine('> Oturum açıldı. "help" yazarak başlayın.', 'highlight');
+            await typeLine('');
+            output.scrollTop = output.scrollHeight;
+        });
+    </script>
+
+</body>
+</html>
